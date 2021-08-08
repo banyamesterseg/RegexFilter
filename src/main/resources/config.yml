@@ -1,0 +1,7 @@
+filters:
+  - pattern: poo
+    deny: true
+    warn: '&cNo dirty talk here'
+  - pattern: fuck
+    replace: fudge
+    warn: '&cDo you kiss your mother with that mouth?'
