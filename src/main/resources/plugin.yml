@@ -1,0 +1,7 @@
+name: SmartChatFilters
+main: me.hazedev.scf.SmartChatFilters
+author: HazeDev
+version: ${project.version}
+api-version: 1.13
+website: 'https://hazedev.me'
+description: 'This plugin makes use of regex for chat filters'
