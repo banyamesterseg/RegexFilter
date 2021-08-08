@@ -27,7 +27,7 @@ public class SmartChatFilters extends JavaPlugin {
         for (Map<?, ?> filterMap: config.getMapList("filters")) {
             ChatFilter filter;
             try {
-                filter = new ChatFilter(filterMap);
+                filter = new ChatFilter(this, filterMap);
             } catch (Exception e) {
                 e.printStackTrace();
                 continue;

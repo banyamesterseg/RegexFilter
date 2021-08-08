@@ -5,3 +5,13 @@ filters:
   - pattern: fuck
     replace: fudge
     warn: '&cDo you kiss your mother with that mouth?'
+    alert:
+      group: staff
+  - pattern: shit
+    replace: sheet
+    warn: '&cNone of that'
+    alert:
+      group: staff
+      message: 'Someone said shit'
+  - pattern: 'kick me'
+    exec: 'kick HazeDev'
