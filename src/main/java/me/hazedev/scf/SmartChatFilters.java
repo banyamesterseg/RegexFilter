@@ -12,6 +12,7 @@ import java.util.Map;
 public class SmartChatFilters extends JavaPlugin {
 
     private List<ChatFilter> filters;
+    public String prefix;
 
     @Override
     public void onEnable() {
@@ -24,6 +25,7 @@ public class SmartChatFilters extends JavaPlugin {
         filters = new ArrayList<>();
         reloadConfig();
         Configuration config = getConfig();
+        prefix = CCUtils.addColor(config.getString("prefix", "&c[ChatFilters] "));
         for (Map<?, ?> filterMap: config.getMapList("filters")) {
             ChatFilter filter;
             try {
@@ -40,4 +42,7 @@ public class SmartChatFilters extends JavaPlugin {
         return Collections.unmodifiableList(filters);
     }
 
+    public String getPrefix() {
+        return prefix;
+    }
 }

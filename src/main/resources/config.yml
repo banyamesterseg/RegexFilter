@@ -1,3 +1,4 @@
+prefix: '&c[ChatFilters] '
 filters:
   - pattern: poo
     deny: true
@@ -5,13 +6,14 @@ filters:
   - pattern: fuck
     replace: fudge
     warn: '&cDo you kiss your mother with that mouth?'
-    alert:
-      group: staff
+    alert-group: staff
   - pattern: shit
     replace: sheet
     warn: '&cNone of that'
-    alert:
-      group: staff
-      message: 'Someone said shit'
+    alert-group: staff
+    alert-message: '%player_name% said {MESSAGE} ({MATCH} matches {PATTERN})'
   - pattern: 'kick me'
-    exec: 'kick HazeDev'
+    exec: 'kick %player_name%'
+  - pattern: 'exempt'
+    warn: 'You are not exempt'
+    exempt: 'exempt'
