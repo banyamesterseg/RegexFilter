@@ -1,6 +1,7 @@
 package me.hazedev.scf;
 
 import me.clip.placeholderapi.PlaceholderAPI;
+
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -27,6 +28,9 @@ public class ChatFilter {
     public ChatFilter(SmartChatFilters plugin, Map<?, ?> map) {
         this.plugin = plugin;
         this.pattern = Pattern.compile((String) map.get("pattern"));
+        if (plugin.isDebugOn()) {
+          Bukkit.getLogger().info("Filter added: /"+this.pattern.toString()+"/");
+        }
         this.deny = map.containsKey("deny") && (boolean) map.get("deny");
         this.warn = CCUtils.addColor((String) map.getOrDefault("warn", null));
         this.replacement = (String) map.getOrDefault("replace", null);
@@ -40,7 +44,10 @@ public class ChatFilter {
         Player sender = event.getPlayer();
         String originalMessage = event.getMessage();
         Matcher matcher = pattern.matcher(originalMessage);
-        if (matcher.matches()) {
+        if (matcher.find()) {
+            if (plugin.isDebugOn()) {
+              Bukkit.getLogger().info("MATCH: /"+this.pattern.toString()+"/");
+            }
             if (exemptGroup != null && groupPredicate(exemptGroup).test(sender)) {
                 return;
             }

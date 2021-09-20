@@ -6,3 +6,12 @@ api-version: 1.13
 website: 'https://hazedev.me'
 description: 'This plugin makes use of regex for chat filters'
 softdepend: [PlaceholderAPI]
+permissions:
+  scf.reload:
+    description: allow filterset reload
+    default: op
+commands:
+  scfreload:
+    description: reload the filters from config.yml
+    usage: /scfreload
+    default: op
