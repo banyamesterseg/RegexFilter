@@ -41,7 +41,7 @@ public class RegexFilterPlugin extends JavaPlugin implements CommandExecutor {
               getLogger().warning("Filter found without pattern, ignoring");
               continue;
             } catch (Exception e) {
-              e.printStackTrace();
+              getLogger().warning(e.getMessage());
               continue;
             }
             filters.add(filter);
