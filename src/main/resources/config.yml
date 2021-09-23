@@ -1,19 +1,112 @@
-prefix: '&c[ChatFilters] '
+# RegexFilter config
+######################
+
+# prefix to show in front of the few command responses RegexFilter has
+prefix: "&4RegexFilter: &r"
+
+# debug mode, log every matching pattern and fired filter action in console
+debug: false
+
+# these are the filters that gets applied to every chat message submitted by players
+#     a pretty good introductory material on RegEx can be found on https://www.regular-expressions.info/
+#     for an exhaustive documentation, see https://docs.oracle.com/en/java/javase/16/docs/api/java.base/java/util/regex/Pattern.html
 filters:
-  - pattern: poo
+# Filters are evaluated in their order of appearance in the config.
+# Each of them is structured as follows, they MAY have one of each attribute;
+# the attributes may appear in any order, but are evaluated in the following:
+#  - pattern:      "regex pattern"      - the pattern the filter matches against the user messages (without slashes)
+#                                         NB: unless you have one, your filter WILL be ignored
+#                                         NB: it is case sensitive, use the flag expression (?i) to make a filter case-ignorant
+#                                         NB: in case of non-ASCII text, use (?iu) instead - it's not enabled by default as it's somewhat slower
+#    exempt-group: "permission-name"    - leaf node under regexfilter.exempt, the filter will be skipped for players with this permission
+#                                         NB: this means side effects as well
+#    notify-group: "permission-name"    - leaf node under regexfilter.notify, players with this permission will get notified if a message matches the filter
+#    notify-text:  "notice message"     - message to be sent to the notified player
+#    warn-text:    "reply message"      - message to be sent back to the player
+#    exec:         "command"            - the command to be executed without leading '/'
+#    deny:         boolean              - if true, the player's message will not be transmitted NB: THIS SKIPS ANY FURTHER FILTERS
+#    replace:      "replacement"        - the replacement text. You can use matched groups with either $<number> or \<number>
+# In the case of notify-text, warn-text, exec and replace, you can use PAPI placeholders with %placeholder% as well as
+#     internal placeholders {PATTERN}, {MATCH} and {MESSAGE}, with the last one containing the message the player originally sent
+# Color/formatting codes SHOULD start with '§' in all cases; don't forget that color overrides formatting, so it should come first.
+
+    # first, let's make players able to use formatting codes as § is untypeable ingame
+    # you may or may not need this depending on your chat plugin
+  - pattern:      "[#&]([0-9a-fk-or])"
+    replace:      "§$1"
+
+# Now let's demonstrate features with some clbuttical examples
+  - pattern:      "(?i)(?:shit|piss|cunt|cocksucker|(?:mother)?fuck(?:er)?|tits)"
+    exempt-group: "carlin"
+    warn-text:    "§c50 years ago they'd have sued you for this"
+    deny:         true
+    # for any of those very nasty words (case insensitve), you get a threatening message and your original message
+    # gets blocked, unless, of course, you're George Carlin.
+    # As the pattern is not flanked by '\b'-s on either side, this leads to the Scunthorpe problem.
+    # Also notice that if you were to write 'ginger cunthair', the next filter would be masked out by the deny directive
+
+  - pattern:      "(?i)\\bging(er|a)\\b"
+    exempt-group: "minchin"
+    notify-group: "gwa"
+    notify-text:  "%player_name% just called someone a {MATCH}"
+    replace:      "Zingiber officinale"
+    # in this case, we only match the whole word so no chance for buttbuttins
+    # notice that you have to double-escape \b
+    # the offending word gets replaced and both the GWA and you get a warning about the incident, with your exact words used
+
+    # *Sigh* I'm running out of comedians so let's have some actually useful filters
+  - pattern:      "^,b"
+    notify-group: "moderators"
+    notify-text:  "§c%player_name% is most likely using Baritone"
+    # let this through apparently unnoticed, your staff will know what to look for though
+
+  - pattern:      "^>(.*)"
+    exempt-group: "newfriends"
+    replace:      "§2>\\1"
+    # greentext
+    # this time, we used the 1st matching group for demonstration,
+    # but this could also be simplified as "^>" -> "§2>"
+
+  - pattern:      "^\\./" # you have to escape . as it would match any character
+    replace:      "/"
+    # show commands to players without thinking
+
+  - pattern:      "(?i)(?:^|\\s+):format:(?:\\s+|$)"
+    # NB: \b does not work with : as th latter is not a word character, use the above workaround when matching shortcodes
+    warn-text:    |-  # you can of course use multi-line YAML as well
+
+      §0#§r0 §1#§r1 §2#§r2 §3#§r3
+      §8#§r8 §9#§r9 §a#§ra §b#§rb
+      §4#§r4 §5#§r5 §6#§r6 §7#§r7
+      §c#§rc §d#§rd §e#§re §f#§rf
+      §k#§rk §l#§rl §m#§rm §n#§rn §o#§ro #r
+    deny:         true
+
+    # test cases below, but stick around as you may learn some tricks
+    # CHECK EXEMPT & WARN & DENY
+  - pattern:      "^exempt$"
+    exempt-group: "test" # only warn players lacking regexfilter.exempt.test
+    warn-text:    "you are not exempt"
     deny: true
-    warn: '&cNo dirty talk here'
-  - pattern: fuck
-    replace: fudge
-    warn: '&cDo you kiss your mother with that mouth?'
-    alert-group: staff
-  - pattern: shit
-    replace: sheet
-    warn: '&cNone of that'
-    alert-group: staff
-    alert-message: '%player_name% said {MESSAGE} ({MATCH} matches {PATTERN})'
-  - pattern: 'kick me'
-    exec: 'kick %player_name%'
-  - pattern: 'exempt'
-    warn: 'You are not exempt'
-    exempt: 'exempt'
+
+    # CHECK COLOR REPLACEMENT
+  - pattern:      "(?i)(?:^|\\s+):rbw:(?:\\s+|$)"
+    replace:      "§4|§c|§6|§e|§a|§2|§3|§b|§1|§9|§d|§5|§f"
+
+    # CHECK COLOR MATCHING
+  - pattern:      "§k" # it's always § in matches
+    exempt-group: "obfuscators"
+    replace:      ""
+
+    # CHECK EXEC & PAPI
+  - pattern:      "^kick me$"
+    exec:         "kick %player_name% you asked for it"
+    deny:         true
+
+    # CHECK INTERNAL PLACEHOLDERS
+  - pattern:      "\\btest\\b"
+    notify-text:  "{MATCH} HAS BEEN SAID"
+    notify-group: "test"
+    warn-text:    "/{PATTERN}/ MATCHED"
+    exec:         "say {MESSAGE}"
+    replace:      "%player_name% tested placeholders with message {MESSAGE}"

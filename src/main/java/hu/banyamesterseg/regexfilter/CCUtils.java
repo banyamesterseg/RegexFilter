@@ -1,4 +1,4 @@
-package me.hazedev.scf;
+package hu.banyamesterseg.regexfilter;
 
 import org.bukkit.ChatColor;
 

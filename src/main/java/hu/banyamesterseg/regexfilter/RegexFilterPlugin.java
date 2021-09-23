@@ -1,4 +1,4 @@
-package me.hazedev.scf;
+package hu.banyamesterseg.regexfilter;
 
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.Configuration;
@@ -13,7 +13,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-public class SmartChatFilters extends JavaPlugin implements CommandExecutor {
+public class RegexFilterPlugin extends JavaPlugin implements CommandExecutor {
 
     private List<ChatFilter> filters;
     public String prefix;
@@ -22,7 +22,7 @@ public class SmartChatFilters extends JavaPlugin implements CommandExecutor {
     @Override
     public void onEnable() {
         Bukkit.getPluginManager().registerEvents(new AsyncPlayerChatListener(this), this);
-        getCommand("scfreload").setExecutor(this);
+        this.getCommand("regexfilter").setExecutor(this);
         saveDefaultConfig();
         reload();
     }
@@ -37,18 +37,22 @@ public class SmartChatFilters extends JavaPlugin implements CommandExecutor {
             ChatFilter filter;
             try {
                 filter = new ChatFilter(this, filterMap);
+            } catch (NullPointerException e) {
+              getLogger().warning("Filter found without pattern, ignoring");
+              continue;
             } catch (Exception e) {
-                e.printStackTrace();
-                continue;
+              e.printStackTrace();
+              continue;
             }
             filters.add(filter);
         }
     }
 
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-      if (label.equals("scfreload")) {
-        if (sender.hasPermission("scf.reload")) {
-          getLogger().info("Filterset reload requested");
+      if (args[0].equals("reload")) {
+        if (sender.hasPermission("regexfilter.reload")) {
+          sender.sendMessage("reinitializing filterset");
+          getLogger().info("reinitializing filterset");
           this.reload();
           return true;
         } else {
@@ -56,7 +60,8 @@ public class SmartChatFilters extends JavaPlugin implements CommandExecutor {
           return true;
         }
       } else {
-        return false;
+        getLogger().info("wtf");
+        return true;
       }
     }
 
