@@ -16,7 +16,9 @@ public class AsyncPlayerChatListener implements Listener {
   public void onAsyncPlayerChat(AsyncPlayerChatEvent event) {
     if (!event.isCancelled() && !event.getPlayer().hasPermission("regexfilter.exempt")) {
       for (ChatFilter filter : plugin.getFilters()) {
-        filter.onAsyncPlayerChat(event);
+        if (!event.isCancelled()) { //deny stops processing
+          filter.onAsyncPlayerChat(event);
+        }
       }
     }
   }

@@ -29,7 +29,7 @@ public class ChatFilter {
     this.plugin = plugin;
     //match
     this.pattern = Pattern.compile((String) map.get("pattern"));
-    Bukkit.getLogger().info("Filter added: /"+this.pattern.toString()+"/");
+    Bukkit.getLogger().info("Filter added: /" + this.pattern.toString().replaceAll("§([0-9a-fk-or])", "§§$1$1") + "§r/");
     //texts
     this.alertMessage = CCUtils.addColor((String) map.getOrDefault("alert-text", null));
     this.warn = CCUtils.addColor((String) map.getOrDefault("warn-text", null));
@@ -48,7 +48,7 @@ public class ChatFilter {
     //MATCH
     if (matcher.find()) {
       if (plugin.isDebugOn()) {
-        Bukkit.getLogger().info("MATCH: /"+pattern.pattern()+"/");
+        Bukkit.getLogger().info("MATCH: /" + pattern.toString().replaceAll("§([0-9a-fk-or])", "§§$1$1") + "§r/");
       }
       //EXEMPT
       if (exemptGroup != null && permissionPredicate(exemptGroup).test(sender)) {

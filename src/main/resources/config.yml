@@ -25,7 +25,7 @@ filters:
 #    warn-text:    "reply message"      - message to be sent back to the player
 #    exec:         "command"            - the command to be executed without leading '/'
 #    deny:         boolean              - if true, the player's message will not be transmitted NB: THIS SKIPS ANY FURTHER FILTERS
-#    replace:      "replacement"        - the replacement text. You can use matched groups with either $<number> or \<number>
+#    replace:      "replacement"        - the replacement text. You can use matched groups with $<number> (\<number> does not seem to work)
 # In the case of notify-text, warn-text, exec and replace, you can use PAPI placeholders with %placeholder% as well as
 #     internal placeholders {PATTERN}, {MATCH} and {MESSAGE}, with the last one containing the message the player originally sent
 # Color/formatting codes SHOULD start with '§' in all cases; don't forget that color overrides formatting, so it should come first.
@@ -36,13 +36,18 @@ filters:
     replace:      "§$1"
 
 # Now let's demonstrate features with some clbuttical examples
+  - pattern:      "fuck"
+    exec:         "kick %player_name% No, he's talking about {FILTER}. You can't say {FILTER} in school, you {FILTER}ing fat ass!"
+    deny:         true
+
   - pattern:      "(?i)(?:shit|piss|cunt|cocksucker|(?:mother)?fuck(?:er)?|tits)"
     exempt-group: "carlin"
     warn-text:    "§c50 years ago they'd have sued you for this"
     deny:         true
     # for any of those very nasty words (case insensitve), you get a threatening message and your original message
     # gets blocked, unless, of course, you're George Carlin.
-    # As the pattern is not flanked by '\b'-s on either side, this leads to the Scunthorpe problem.
+    # however, the word 'fuck' would already have triggered the previous filter and got the message denied, so that won't reach this one.
+    # As the pattern is not flanked by '\b'-s on either side, this filter leads to the Scunthorpe problem.
     # Also notice that if you were to write 'ginger cunthair', the next filter would be masked out by the deny directive
 
   - pattern:      "(?i)\\bging(er|a)\\b"
@@ -62,7 +67,7 @@ filters:
 
   - pattern:      "^>(.*)"
     exempt-group: "newfriends"
-    replace:      "§2>\\1"
+    replace:      "§2>$1"
     # greentext
     # this time, we used the 1st matching group for demonstration,
     # but this could also be simplified as "^>" -> "§2>"
@@ -72,7 +77,7 @@ filters:
     # show commands to players without thinking
 
   - pattern:      "(?i)(?:^|\\s+):format:(?:\\s+|$)"
-    # NB: \b does not work with : as th latter is not a word character, use the above workaround when matching shortcodes
+    # NB: \b does not work with : as th latter is not a word character, use the above workaround when matching (emoji) shortcodes
     warn-text:    |-  # you can of course use multi-line YAML as well
 
       §0#§r0 §1#§r1 §2#§r2 §3#§r3
@@ -97,11 +102,6 @@ filters:
   - pattern:      "§k" # it's always § in matches
     exempt-group: "obfuscators"
     replace:      ""
-
-    # CHECK EXEC & PAPI
-  - pattern:      "^kick me$"
-    exec:         "kick %player_name% you asked for it"
-    deny:         true
 
     # CHECK INTERNAL PLACEHOLDERS
   - pattern:      "\\btest\\b"
