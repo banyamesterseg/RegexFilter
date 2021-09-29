@@ -37,7 +37,7 @@ filters:
 
 # Now let's demonstrate features with some clbuttical examples
   - pattern:      "fuck"
-    exec:         "kick %player_name% No, he's talking about {FILTER}. You can't say {FILTER} in school, you {FILTER}ing fat ass!"
+    exec:         "kick %player_name% No, he's talking about {FILTER}. You can't say {FILTER} in school, you {FILTER}ing fatass!"
     deny:         true
 
   - pattern:      "(?i)(?:shit|piss|cunt|cocksucker|(?:mother)?fuck(?:er)?|tits)"
@@ -76,7 +76,7 @@ filters:
     replace:      "/"
     # show commands to players without thinking
 
-  - pattern:      "(?i)(?:^|\\s+):format:(?:\\s+|$)"
+  - pattern:      "(?i)(?<=^|\\s+):format:(?=\\s+|$)"
     # NB: \b does not work with : as th latter is not a word character, use the above workaround when matching (emoji) shortcodes
     warn-text:    |-  # you can of course use multi-line YAML as well
 
@@ -95,7 +95,7 @@ filters:
     deny: true
 
     # CHECK COLOR REPLACEMENT
-  - pattern:      "(?i)(?:^|\\s+):rbw:(?:\\s+|$)"
+  - pattern:      "(?i)(?<=^|\\s+):rbw:(?=\\s+|$)"
     replace:      "§4|§c|§6|§e|§a|§2|§3|§b|§1|§9|§d|§5|§f"
 
     # CHECK COLOR MATCHING
