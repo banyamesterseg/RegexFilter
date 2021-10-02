@@ -89,6 +89,7 @@ public class ChatFilter {
         } catch(NullPointerException e) {
           Bukkit.getLogger().info("Notification recipient group "+alertGroup+" is empty, no messages sent");
         }
+        Bukkit.getLogger().info("RegexFilter notification: "+falert);
       }
       //WARN
       if (warn != null) {
