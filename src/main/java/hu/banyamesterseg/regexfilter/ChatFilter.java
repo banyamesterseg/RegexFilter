@@ -25,20 +25,32 @@ public class ChatFilter {
   String alertMessage;
   String exemptGroup;
 
-  public ChatFilter(RegexFilterPlugin plugin, Map<?, ?> map) {
+  public ChatFilter(RegexFilterPlugin plugin, Map<?, ?> config) {
     this.plugin = plugin;
     //match
-    this.pattern = Pattern.compile((String) map.get("pattern"));
+    this.pattern = Pattern.compile((String) config.get("pattern"));
     Bukkit.getLogger().info("Filter added: /" + this.pattern.toString().replaceAll("§([0-9a-fk-or])", "§§$1$1") + "§r/");
     //texts
-    this.alertMessage = CCUtils.addColor((String) map.getOrDefault("alert-text", null));
-    this.warn = CCUtils.addColor((String) map.getOrDefault("warn-text", null));
-    this.command = (String) map.getOrDefault("exec", null);
-    this.replacement = (String) map.getOrDefault("replace", null);
+    this.alertMessage = ColorFormatter.addColor((String) config.getOrDefault("notify-text", null));
+    if (this.alertMessage == null) {
+      this.alertMessage = ColorFormatter.addColor((String) config.getOrDefault("alert-text", null));
+    }
+    this.warn         = ColorFormatter.addColor((String) config.getOrDefault("warn-text", null));
+    this.command      = (String) config.getOrDefault("exec", null);
+    this.replacement  = (String) config.getOrDefault("replace", null);
     //behavior
-    this.deny = map.containsKey("deny") && (boolean) map.get("deny");
-    this.alertGroup = (String) "regexfilter.notify."+map.getOrDefault("alert-group", null);
-    this.exemptGroup = (String) "regexfilter.exempt."+map.getOrDefault("exempt-group", null);
+    this.deny = config.containsKey("deny") && (boolean) config.get("deny");
+    this.alertGroup = (String) config.getOrDefault("notify-group", null);
+    if (this.alertGroup == null ) {
+      this.alertGroup = (String) config.getOrDefault("alert-group", null);
+    }
+    if (this.alertGroup != null ) {
+      this.alertGroup = "regexfilter.notify."+this.alertGroup;
+    }
+    this.exemptGroup = (String) config.getOrDefault("exempt-group", null);
+    if (this.exemptGroup != null ) {
+      this.exemptGroup = "regexfilter.exempt."+this.exemptGroup;
+    }
   }
 
   public void onAsyncPlayerChat(AsyncPlayerChatEvent event) {
@@ -66,7 +78,7 @@ public class ChatFilter {
                                 .replace("{PATTERN}", pattern.pattern())
                                 .replace("{MATCH}", matcher.group());
         } else {
-          alert = CCUtils.addColor("&cA message has been filtered");
+          alert = ColorFormatter.addColor("&cA message has been filtered");
         }
         if (plugin.isDebugOn()) {
           Bukkit.getLogger().info("  NOTIF "+alertGroup+" with \""+alert+"\"");

@@ -31,7 +31,7 @@ public class RegexFilterPlugin extends JavaPlugin implements CommandExecutor {
         filters = new ArrayList<>();
         reloadConfig();
         Configuration config = getConfig();
-        prefix = CCUtils.addColor(config.getString("prefix", "&c[ChatFilters] "));
+        prefix = ColorFormatter.addColor(config.getString("prefix", "&7Regex&BFilter&8> "));
         debug = config.getBoolean("debug", false);
         for (Map<?, ?> filterMap: config.getMapList("filters")) {
             ChatFilter filter;
