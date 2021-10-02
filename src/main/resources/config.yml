@@ -37,7 +37,7 @@ filters:
 
 # Now let's demonstrate features with some clbuttical examples
   - pattern:      "fuck"
-    exec:         "kick %player_name% No, he's talking about {FILTER}. You can't say {FILTER} in school, you {FILTER}ing fatass!"
+    exec:         "kick %player_name% No, he's talking about {MATCH}. You can't say {MATCH} in school, you {MATCH}ing fatass!"
     deny:         true
 
   - pattern:      "(?i)(?:shit|piss|cunt|cocksucker|(?:mother)?fuck(?:er)?|tits)"
