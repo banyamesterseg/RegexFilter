@@ -15,65 +15,66 @@ import java.util.Map;
 
 public class RegexFilterPlugin extends JavaPlugin implements CommandExecutor {
 
-    private List<ChatFilter> filters;
-    public String prefix;
-    public boolean debug;
+  private List<ChatFilter> filters;
+  public String prefix;
+  public boolean debug;
 
-    @Override
-    public void onEnable() {
-        Bukkit.getPluginManager().registerEvents(new AsyncPlayerChatListener(this), this);
-        this.getCommand("regexfilter").setExecutor(this);
-        saveDefaultConfig();
-        reload();
+  @Override
+  public void onEnable() {
+    Bukkit.getPluginManager().registerEvents(new AsyncPlayerChatListener(this), this);
+    this.getCommand("regexfilter").setExecutor(this);
+    saveDefaultConfig();
+    reload();
+  }
+
+  public void reload() {
+    filters = new ArrayList<>();
+    reloadConfig();
+    Configuration config = getConfig();
+    prefix = ColorFormatter.addColor(config.getString("prefix", "&7Regex&BFilter&8> "));
+    debug = config.getBoolean("debug", false);
+    for (Map<?, ?> filterConfig: config.getMapList("filters")) {
+      ChatFilter filter;
+      try {
+        filter = new ChatFilter(this, filterMap);
+      } catch (NullPointerException e) {
+        getLogger().warning("Filter found without pattern, ignoring");
+        continue;
+      } catch (Exception e) {
+        getLogger().warning(e.getMessage());
+        continue;
+      }
+      filters.add(filter);
     }
+  }
 
-    public void reload() {
-        filters = new ArrayList<>();
-        reloadConfig();
-        Configuration config = getConfig();
-        prefix = ColorFormatter.addColor(config.getString("prefix", "&7Regex&BFilter&8> "));
-        debug = config.getBoolean("debug", false);
-        for (Map<?, ?> filterMap: config.getMapList("filters")) {
-            ChatFilter filter;
-            try {
-                filter = new ChatFilter(this, filterMap);
-            } catch (NullPointerException e) {
-              getLogger().warning("Filter found without pattern, ignoring");
-              continue;
-            } catch (Exception e) {
-              getLogger().warning(e.getMessage());
-              continue;
-            }
-            filters.add(filter);
-        }
-    }
-
-    public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-      if (args[0].equals("reload")) {
-        if (sender.hasPermission("regexfilter.reload")) {
-          sender.sendMessage("reinitializing filterset");
-          getLogger().info("reinitializing filterset");
-          this.reload();
-          return true;
-        } else {
-          sender.sendMessage("no you don't");
-          return true;
-        }
+  public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
+    if (args[0].equals("reload")) {
+      if (sender.hasPermission("regexfilter.reload")) {
+        sender.sendMessage("reinitializing filterset");
+        getLogger().info("reinitializing filterset");
+        this.reload();
+        return true;
       } else {
-        getLogger().info("wtf");
+        sender.sendMessage("no you don't");
         return true;
       }
+    } else {
+      getLogger().info("wtf");
+      return true;
     }
+  }
 
-    public Iterable<ChatFilter> getFilters() {
-        return Collections.unmodifiableList(filters);
-    }
+  public Iterable<ChatFilter> getFilters() {
+    return Collections.unmodifiableList(filters);
+  }
 
-    public String getPrefix() {
-        return prefix;
-    }
+  public String getPrefix() {
+    return prefix;
+  }
 
-    public boolean isDebugOn() {
-        return debug;
-    }
+  public boolean isDebugOn() {
+    return debug;
+  }
 }
+//vim: ts=2 sw=2 et

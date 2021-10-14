@@ -105,9 +105,9 @@ public class ChatFilter {
       //EXEC
       if (command != null) {
         String replacedCommand = PlaceholderAPI.setPlaceholders(sender, this.command)
-                                 .replace("{MESSAGE}", originalMessage)
-                                 .replace("{PATTERN}", pattern.pattern())
-                                 .replace("{MATCH}", matcher.group());
+                                               .replace("{MESSAGE}", originalMessage)
+                                               .replace("{PATTERN}", pattern.pattern())
+                                               .replace("{MATCH}", matcher.group());
         if (plugin.isDebugOn()) {
           Bukkit.getLogger().info("  EXEC \""+replacedCommand+"§r\"");
         }
@@ -119,7 +119,7 @@ public class ChatFilter {
           Bukkit.getLogger().info("  DENY \""+originalMessage+"§r\"");
         }
         event.setCancelled(true);
-      //REPLACE
+        //REPLACE
       } else if (replacement != null) {
         if (plugin.isDebugOn()) {
           Bukkit.getLogger().info("  REPLACING");
@@ -137,3 +137,4 @@ public class ChatFilter {
     return player -> player.hasPermission(permission);
   }
 }
+//vim: sw=2 ts=2 et
