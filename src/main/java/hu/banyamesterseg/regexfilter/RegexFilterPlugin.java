@@ -60,7 +60,7 @@ public class RegexFilterPlugin extends JavaPlugin implements CommandExecutor {
       if (filterConfig.get("include") != null) {
         try {
           File incFile = new File("plugins"+File.separator+"RegexFilter"+File.separator+filterConfig.get("include"));
-          getLogger().info(incFile.getCanonicalPath());
+          getLogger().info("Including: "+incFile.getCanonicalPath());
           Configuration include = YamlConfiguration.loadConfiguration(incFile);
           addFilters(include.getMapList("filters"), filters);
         } catch (Exception e) {
