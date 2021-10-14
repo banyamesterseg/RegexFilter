@@ -14,7 +14,10 @@ filters:
 # Filters are evaluated in their order of appearance in the config.
 # Each of them is structured as follows, they MAY have one of each attribute;
 # the attributes may appear in any order, but are evaluated in the following:
-#  - pattern:      "regex pattern"      - the pattern the filter matches against the user messages (without slashes)
+#  - include:      "relative path"      - another file containing other patterns, in an identical format (up to and including 'filters:'
+#                                         NB: if it is present, none other attributes are evaluated
+#                                         NB: I do not check for recursion depth, if you do point two of these against each other's files, the server WILL throw the plugin out
+#    pattern:      "regex pattern"      - the pattern the filter matches against the user messages (without slashes)
 #                                         NB: unless you have one, your filter WILL be ignored
 #                                         NB: it is case sensitive, use the flag expression (?i) to make a filter case-ignorant
 #                                         NB: in case of non-ASCII text, use (?iu) instead - it's not enabled by default as it's somewhat slower

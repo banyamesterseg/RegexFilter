@@ -13,6 +13,7 @@ Notice: this plugin does no filtering ON ITS OWN; you'll have to set up the patt
   - **Exempt** staff from filters (again, permissions)
   - **PCRE**-compatible engine ([java.util.regex](https://docs.oracle.com/javase/8/docs/api/index.html?java/util/regex/package-summary.html))
   - **YAML** config
+  - **Include** other files to make your filters more manageable
 
 ## Commands
   - /regexfilter reload: reloads the config, requires the relevant permission (or OP)
