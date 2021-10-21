@@ -33,7 +33,7 @@ public class RegexFilterPlugin extends JavaPlugin implements CommandExecutor {
     filters = new ArrayList<>();
     reloadConfig();
     Configuration config = getConfig();
-    prefix = ColorFormatter.addColor(config.getString("prefix", "&7Regex&BFilter&8> "));
+    prefix = ColorFormatter.addColor(config.getString("prefix", "&7Regex&BFilter&8> &7"));
     debug = config.getBoolean("debug", false);
     addFilters(config.getMapList("filters"), filters);
   }

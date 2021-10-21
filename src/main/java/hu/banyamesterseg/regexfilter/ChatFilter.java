@@ -15,15 +15,13 @@ import java.util.regex.Pattern;
 public class ChatFilter {
 
   private final RegexFilterPlugin plugin;
-
-  Pattern pattern;
-  boolean deny;
-  String warn;
-  String replacement;
-  String command;
-  String alertGroup;
-  String alertMessage;
-  String exemptGroup;
+  private boolean deny;
+  private String warn;
+  private String replacement;
+  private String command;
+  private String alertGroup;
+  private String alertMessage;
+  private String exemptGroup;
 
   public ChatFilter(RegexFilterPlugin plugin, Map<?, ?> config) {
     this.plugin = plugin;

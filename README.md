@@ -19,18 +19,18 @@ Notice: this plugin does no filtering ON ITS OWN; you'll have to set up the patt
   - /regexfilter reload: reloads the config, requires the relevant permission (or OP)
 
 ## Permissions
-  - regexfilter.exempt:    don't apply any filters whatsoever - NB this currently blocks side effects also
-  - regexfilter.exempt.<group>:  don't apply specific filters - you can specify permission leaf node names in the config
-  - regexfilter.notify.<group>:   alert on specific matches   - you can specify permission leaf node names in the config
+  - regexfilter.exempt:                don't apply any filters whatsoever - NB this currently blocks side effects also
+  - regexfilter.exempt.&lt;group&gt;:  don't apply specific filters - you can specify permission leaf node names in the config
+  - regexfilter.notify.&lt;group&gt;:  alert on specific matches   - you can specify permission leaf node names in the config
   - regexfilter.reload
 
 ## Configuration
 see included `config.yml` for details and examples
 
 ## Upcoming features
-  - JSON support
-  - More commands, in-game modification of filters
+  - JSON (_/tellraw_) support
+  - More commands
+    - in-game modification of filters (add/remove/edit)
+    - on-line testing (test)
   - Automatic reload of config on save
-  - Multiple outcomes
-  - Test harness
-  - Migration to Gradle
+  - Multiple outcomes (chance results)
