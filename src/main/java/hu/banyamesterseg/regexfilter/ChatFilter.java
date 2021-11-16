@@ -16,6 +16,7 @@ public class ChatFilter {
 
   private final RegexFilterPlugin plugin;
   private boolean deny;
+  private Pattern pattern;
   private String warn;
   private String replacement;
   private String command;
@@ -122,11 +123,31 @@ public class ChatFilter {
         if (plugin.isDebugOn()) {
           Bukkit.getLogger().info("  REPLACING");
         }
-        String replacedReplacement = PlaceholderAPI.setPlaceholders(sender, replacement)
-                                                   .replace("{MESSAGE}", originalMessage)
-                                                   .replace("{PATTERN}", pattern.pattern())
-                                                   .replace("{MATCH}", matcher.group());
-        event.setMessage(matcher.replaceAll(replacedReplacement));
+        StringBuffer result = new StringBuffer();
+        String originalMatch = matcher.group();
+        matcher.reset();
+
+        while (matcher.find()) {
+          matcher.appendReplacement(result, replacement);
+          String resultStr = result.toString();
+          String format;
+          if (matcher.start() == 0) {
+            format = "§r";
+          } else {
+            format = ChatColor.getLastColors(resultStr.substring(0, matcher.start() - 1));
+            if (format.equals("")) {
+              format = "§r";
+            }
+          }
+          resultStr = resultStr.replace("§p", format);
+          result = new StringBuffer(resultStr);
+        }
+        matcher.appendTail(result);
+        String resultStr = PlaceholderAPI.setPlaceholders(sender, result.toString())
+                                         .replace("{MESSAGE}", originalMessage)
+                                         .replace("{PATTERN}", pattern.pattern())
+                                         .replace("{MATCH}", originalMatch);
+        event.setMessage(resultStr);
       }
     }
   }
