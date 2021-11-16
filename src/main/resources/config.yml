@@ -29,9 +29,15 @@ filters:
 #    exec:         "command"            - the command to be executed without leading '/'
 #    deny:         boolean              - if true, the player's message will not be transmitted NB: THIS SKIPS ANY FURTHER FILTERS
 #    replace:      "replacement"        - the replacement text. You can use matched groups with $<number> (\<number> does not seem to work)
-# In the case of notify-text, warn-text, exec and replace, you can use PAPI placeholders with %placeholder% as well as
-#     internal placeholders {PATTERN}, {MATCH} and {MESSAGE}, with the last one containing the message the player originally sent
+#
+# In the case of notify-text, warn-text, exec and replace, you can use PAPI placeholders with %placeholder%, as well as
+#     the following internal placeholders:
+#       - {PATTERN} - contains the regex pattern, mostly used for debug purposes
+#       - {MATCH}   - contains the FIRST matching string
+#       - {MESSAGE} - contains the whole original message
 # Color/formatting codes SHOULD start with '§' in all cases; don't forget that color overrides formatting, so it should come first.
+# Apart from the regular formatting codes, you can now use '§p' to restore the text formatting as it were before the replacement
+# NB: this does not take the 'base' text color into account as it is usually handled by a chat plugin at a later stage
 
     # first, let's make players able to use formatting codes as § is untypeable ingame
     # you may or may not need this depending on your chat plugin
@@ -80,7 +86,8 @@ filters:
     # show commands to players without thinking
 
   - pattern:      "(?i)(?<=^|\\s+):format:(?=\\s+|$)"
-    # NB: \b does not work with : as th latter is not a word character, use the above workaround when matching (emoji) shortcodes
+    # NB: \b does not work here, as ":" is not considered a word character
+    #     use the above workaround when matching (emoji) shortcodes
     warn-text:    |-  # you can of course use multi-line YAML as well
 
       §0#§r0 §1#§r1 §2#§r2 §3#§r3
