@@ -28,7 +28,7 @@ dependencies {
 }
 
 group = 'hu.banyamesterseg.regexfilter'
-version = '1.6.0'
+version = '1.7.0'
 description = 'RegexFilter'
 java.sourceCompatibility = JavaVersion.VERSION_16
 
